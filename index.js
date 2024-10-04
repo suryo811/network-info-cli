@@ -25,7 +25,7 @@ const getPublicNetworkInfo = async () => {
         const response = await got(`https://ipinfo.io/?token=${process.env.IPINFO_TOKEN}`, { responseType: 'json' })
         return response.body
     } catch (error) {
-        console.error('Error fetching public network info');
+        console.error('Error fetching public network info', error);
     }
 }
 
@@ -35,7 +35,9 @@ const getPublicNetworkInfo = async () => {
     console.log('Local Network Info:', localInfo);
 
     const publicInfo = await getPublicNetworkInfo();
-    console.log('Public IP:', publicInfo.ip)
-    console.log('ISP:', publicInfo.org)
-    console.log('Location:', `${publicInfo.city}, ${publicInfo.region}, ${publicInfo.country}`)
+    if (publicInfo) {
+        console.log('Public IP:', publicInfo.ip)
+        console.log('ISP:', publicInfo.org)
+        console.log('Location:', `${publicInfo.city}, ${publicInfo.region}, ${publicInfo.country}`)
+    }
 })();

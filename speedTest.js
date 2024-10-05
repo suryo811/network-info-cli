@@ -63,7 +63,7 @@ async function runMultipleTests(testFunction, numTests) {
 
 // Main function to run tests and show results
 async function runSpeedTest() {
-    const numTests = 5;
+    const numTests = config.numOfTest
     console.log('Tests are running, please wait...') //TODO:add spinner here
 
     try {

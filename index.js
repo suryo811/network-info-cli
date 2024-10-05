@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 import inquirer from 'inquirer';
-import dotenv from 'dotenv'
-dotenv.config();
 import { logNetworkInfo } from './features/networkInfo.js'
 import { runSpeedTest } from './features/speedTest.js'
 
@@ -37,8 +35,8 @@ async function mainMenu() {
                 console.log('Invalid option!');
         }
 
-        // Re-display the menu after the task is done
-        await mainMenu();
+        // // Re-display the menu after the task is done
+        // await mainMenu();
     } catch (error) {
         console.error('Prompt was closed unexpectedly');
     }

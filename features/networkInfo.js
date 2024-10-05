@@ -16,9 +16,10 @@ const getLocalNetworkInfo = () => {
     return results;
 }
 
+
 const getPublicNetworkInfo = async () => {
     try {
-        const response = await got(`https://ipinfo.io/?token=${process.env.IPINFO_TOKEN}`, { responseType: 'json' })
+        const response = await got(`https://ipinfo.io`, { responseType: 'json' })
         return response.body
     } catch (error) {
         console.error('Error fetching public network info', error);

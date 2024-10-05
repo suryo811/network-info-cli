@@ -1,43 +1,56 @@
 #!/usr/bin/env node
-import os from 'os';
-import got from 'got';
-import dotenv from 'dotenv';
+import inquirer from 'inquirer';
+import dotenv from 'dotenv'
 dotenv.config();
+import { logNetworkInfo } from './networkInfo.js'
+import { runSpeedTest } from './speedTest.js'
 
+// Function to display the interactive menu
+async function mainMenu() {
+    const choices = [
+        { name: 'Network Info', value: 'networkInfo' },
+        { name: 'Speed Test', value: 'speedTest' },
+        { name: 'Exit', value: 'exit' }
+    ];
 
-const getLocalNetworkInfo = () => {
-    const networkInterfaces = os.networkInterfaces();
-    const results = {};
-
-    for (const name of Object.keys(networkInterfaces)) {
-        for (const net of networkInterfaces[name]) {
-            // Skip over internal (i.e., 127.0.0.1) and non-IPv4 addresses
-            if (net.family === 'IPv4' && !net.internal) {
-                results[name] = net.address;
-            }
-        }
-    }
-    return results;
-}
-
-const getPublicNetworkInfo = async () => {
     try {
-        const response = await got(`https://ipinfo.io/?token=${process.env.IPINFO_TOKEN}`, { responseType: 'json' })
-        return response.body
+        const answer = await inquirer.prompt([
+            {
+                type: 'list',
+                name: 'selection',
+                message: 'Select an option:',
+                choices: choices
+            }
+        ]);
+
+        switch (answer.selection) {
+            case 'networkInfo':
+                await logNetworkInfo();
+                break;
+            case 'speedTest':
+                await runSpeedTest();
+                break;
+            case 'exit':
+                console.log('Goodbye!');
+                return;
+            default:
+                console.log('Invalid option!');
+        }
+
+        // Re-display the menu after the task is done
+        await mainMenu();
     } catch (error) {
-        console.error('Error fetching public network info', error);
+        console.error('Prompt was closed unexpectedly');
     }
+
+
 }
 
-(async () => {
-    // Local network details
-    const localInfo = getLocalNetworkInfo();
-    console.log('Local Network Info:', localInfo);
+// Listen for SIGINT (Ctrl+C)
+process.on('SIGINT', () => {
+    console.log('\nExiting the application... Goodbye!');
+    process.exit(0); // Exit the application cleanly
+});
 
-    const publicInfo = await getPublicNetworkInfo();
-    if (publicInfo) {
-        console.log('Public IP:', publicInfo.ip)
-        console.log('ISP:', publicInfo.org)
-        console.log('Location:', `${publicInfo.city}, ${publicInfo.region}, ${publicInfo.country}`)
-    }
-})();
+// Start the CLI app
+mainMenu();

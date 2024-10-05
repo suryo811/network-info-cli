@@ -1,5 +1,5 @@
 import got from 'got'
-import config from './config.js'
+import config from '../config.js'
 
 // Function to test download speed
 async function testDownloadSpeed() {

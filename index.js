@@ -2,8 +2,8 @@
 import inquirer from 'inquirer';
 import dotenv from 'dotenv'
 dotenv.config();
-import { logNetworkInfo } from './networkInfo.js'
-import { runSpeedTest } from './speedTest.js'
+import { logNetworkInfo } from './features/networkInfo.js'
+import { runSpeedTest } from './features/speedTest.js'
 
 // Function to display the interactive menu
 async function mainMenu() {

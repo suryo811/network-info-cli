@@ -15,6 +15,7 @@
   "description": "",
   "dependencies": {
     "dotenv": "^16.4.5",
-    "got": "^14.4.2"
+    "got": "^14.4.2",
+    "inquirer": "^11.1.0"
   }
 }
